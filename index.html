@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NXT Arena | Download the Ultimate App</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- GSAP for Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#ff4655', // Action red
+                        secondary: '#0f1923', // Dark background
+                        accent: '#ece8e1', // Light text
+                        darker: '#0a1014'
+                    },
+                    fontFamily: {
+                        heading: ['Orbitron', 'sans-serif'],
+                        body: ['Rajdhani', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'hero-pattern': "url('https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop')",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0f1923;
+            color: #ece8e1;
+            overflow-x: hidden;
+        }
+
+        .clip-path-slant {
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        }
+
+        .btn-glitch {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-glitch::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-glitch:hover::before {
+            left: 100%;
+        }
+
+        .glow-effect {
+            box-shadow: 0 0 15px rgba(255, 70, 85, 0.5);
+            transition: box-shadow 0.3s ease;
+        }
+        
+        .glow-effect:hover {
+            box-shadow: 0 0 30px rgba(255, 70, 85, 0.8);
+        }
+
+        /* Loading Overlay Style */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0f1923;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 70, 85, 0.3);
+            border-top-color: #ff4655;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="font-body antialiased relative">
+
+    <!-- Preloader -->
+    <div id="loader">
+        <div class="spinner mb-4"></div>
+        <h2 class="font-heading text-2xl text-primary font-bold uppercase tracking-widest">Loading</h2>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center bg-secondary/80 backdrop-blur-md border-b border-gray-800">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-gamepad text-primary text-3xl"></i>
+                <span class="font-heading text-2xl font-bold uppercase tracking-wider text-white">NXT <span class="text-primary">Arena</span></span>
+            </div>
+            
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden text-white text-2xl" id="mobile-menu-btn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            
+            <!-- Desktop Menu -->
+            <ul class="hidden md:flex space-x-8 text-lg font-semibold tracking-wide">
+                <li><a href="#home" class="hover:text-primary transition-colors duration-300">Home</a></li>
+                <li><a href="#features" class="hover:text-primary transition-colors duration-300">Features</a></li>
+                <li><a href="#about" class="hover:text-primary transition-colors duration-300">About</a></li>
+            </ul>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div class="md:hidden absolute w-full bg-darker hidden flex-col items-center py-4 border-b border-gray-800" id="mobile-menu">
+            <a href="#home" class="py-2 hover:text-primary transition-colors w-full text-center">Home</a>
+            <a href="#features" class="py-2 hover:text-primary transition-colors w-full text-center">Features</a>
+            <a href="#about" class="py-2 hover:text-primary transition-colors w-full text-center">About</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center pt-20 pb-12 lg:pt-0 overflow-hidden clip-path-slant bg-darker">
+        <!-- Background Overlay -->
+        <div class="absolute inset-0 bg-hero-pattern bg-cover bg-center opacity-20 bg-fixed"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-secondary/80 via-darker/90 to-darker"></div>
+
+        <div class="container mx-auto px-6 relative z-10 grid lg:grid-cols-2 gap-12 items-center">
+            
+            <!-- Text Content -->
+            <div class="hero-content text-center lg:text-left">
+                <div class="inline-block px-4 py-1 rounded-full bg-primary/20 border border-primary/30 text-primary font-bold text-sm uppercase tracking-widest mb-6 hero-badge">
+                    <i class="fa-solid fa-bolt mr-2"></i> New Season Live
+                </div>
+                
+                <h1 class="font-heading text-5xl md:text-6xl lg:text-7xl font-black leading-tight mb-4 uppercase text-white drop-shadow-lg hero-title">
+                    Dominate <br/>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-500">The Arena</span>
+                </h1>
+                
+                <p class="text-lg md:text-xl text-gray-400 mb-8 max-w-xl mx-auto lg:mx-0 hero-desc">
+                    Join daily Free Fire tournaments, compete with top squads, and win real rewards. Download the official app now to start your journey to conqueror.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start hero-buttons">
+                    <!-- Triggers the download modal -->
+                    <button id="hero-download-btn" class="btn-glitch bg-primary hover:bg-red-600 text-white font-bold py-4 px-8 rounded-lg w-full sm:w-auto text-lg uppercase tracking-wider flex items-center justify-center gap-3 glow-effect transition-all transform hover:-translate-y-1 text-left">
+                        <i class="fa-brands fa-android text-2xl"></i>
+                        <div>
+                            <span class="block text-xs font-normal">Download for Android</span>
+                            <span class="block leading-none">Download APK (2.1 MB)</span>
+                        </div>
+                    </button>
+                    
+                    <a href="#features" class="bg-transparent border-2 border-gray-600 hover:border-gray-400 text-white font-bold py-4 px-8 rounded-lg text-lg uppercase tracking-wider flex items-center justify-center transition-all hover:bg-gray-800">
+                        Explore Features
+                    </a>
+                </div>
+                
+                <div class="mt-8 flex items-center justify-center lg:justify-start gap-4 text-sm text-gray-500 hero-stats">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-shield-halved text-green-500"></i>
+                        <span>100% Safe & Secure</span>
+                    </div>
+                    <div class="w-1 h-1 bg-gray-600 rounded-full"></div>
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-bolt text-yellow-500"></i>
+                        <span>Fast 2.1 MB Download</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Image/Mockup Graphics -->
+            <div class="relative hero-image hidden lg:block">
+                <!-- Abstract geometric background behind phone -->
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-primary/20 to-transparent rounded-full blur-3xl -z-10"></div>
+                
+                <!-- We use a placeholder image for a mobile mockup, styled to look modern -->
+                <div class="relative mx-auto w-64 md:w-80 h-[500px] bg-gray-900 border-4 border-gray-800 rounded-[2.5rem] shadow-[0_0_50px_rgba(255,70,85,0.3)] overflow-hidden transform rotate-[-5deg] hover:rotate-0 transition-transform duration-500">
+                    <!-- Notch -->
+                    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-gray-800 rounded-b-xl z-20"></div>
+                    
+                    <!-- App UI Mockup (Built with HTML/CSS inside the phone) -->
+                    <div class="w-full h-full bg-darker p-4 pt-10 flex flex-col relative">
+                        <div class="text-center mb-6">
+                            <h3 class="font-heading text-xl text-white font-bold">NXT ARENA</h3>
+                            <p class="text-xs text-primary">Daily Matches</p>
+                        </div>
+                        
+                        <!-- Mock Tournament Cards -->
+                        <div class="space-y-3">
+                            <div class="bg-secondary p-3 rounded-xl border border-gray-800">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-xs font-bold bg-primary/20 text-primary px-2 py-1 rounded">CS Ranked</span>
+                                    <span class="text-xs text-gray-400">14:00 PM</span>
+                                </div>
+                                <h4 class="font-bold text-sm text-white">Squad Clash Masters</h4>
+                                <div class="mt-2 flex justify-between text-xs text-gray-400">
+                                    <span>Prize: 1000💎</span>
+                                    <span>44/48 Joined</span>
+                                </div>
+                                <div class="w-full bg-gray-800 h-1 mt-1 rounded-full overflow-hidden">
+                                    <div class="bg-primary w-11/12 h-full"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-secondary p-3 rounded-xl border border-gray-800">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-xs font-bold bg-blue-500/20 text-blue-400 px-2 py-1 rounded">Full Map</span>
+                                    <span class="text-xs text-gray-400">18:00 PM</span>
+                                </div>
+                                <h4 class="font-bold text-sm text-white">Survival Series Weekly</h4>
+                                <div class="mt-2 flex justify-between text-xs text-gray-400">
+                                    <span>Prize: 5000💎</span>
+                                    <span>20/48 Joined</span>
+                                </div>
+                                <div class="w-full bg-gray-800 h-1 mt-1 rounded-full overflow-hidden">
+                                    <div class="bg-blue-400 w-5/12 h-full"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mock Floating Action Button -->
+                        <div class="absolute bottom-6 right-4 w-12 h-12 bg-primary rounded-full flex items-center justify-center shadow-lg">
+                            <i class="fa-solid fa-plus text-white"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Floating Elements around phone -->
+                <div class="absolute top-20 -left-10 bg-secondary border border-gray-700 p-3 rounded-xl shadow-xl floating-el-1">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-trophy text-yellow-500 text-xl"></i>
+                        <div>
+                            <p class="text-xs text-gray-400">Daily Prizes</p>
+                            <p class="text-sm font-bold text-white">Up to 10k💎</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="absolute bottom-32 -right-8 bg-secondary border border-gray-700 p-3 rounded-xl shadow-xl floating-el-2">
+                     <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-users text-blue-500 text-xl"></i>
+                        <div>
+                            <p class="text-xs text-gray-400">Active Players</p>
+                            <p class="text-sm font-bold text-white">5,000+</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-24 bg-secondary relative">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 feature-header">
+                <h2 class="font-heading text-4xl md:text-5xl font-bold uppercase text-white mb-4">Why Choose <span class="text-primary">Our App</span></h2>
+                <div class="w-24 h-1 bg-primary mx-auto mb-6"></div>
+                <p class="text-gray-400 max-w-2xl mx-auto text-lg">Designed for real gamers. Experience smooth registration, instant updates, and transparent prize distribution.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="bg-darker p-8 rounded-2xl border border-gray-800 hover:border-primary/50 transition-colors duration-300 group feature-card">
+                    <div class="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                        <i class="fa-solid fa-bolt text-3xl text-primary"></i>
+                    </div>
+                    <h3 class="font-heading text-2xl font-bold text-white mb-3">Ultra Lightweight</h3>
+                    <p class="text-gray-400">At just 2.1 MB, the app downloads in seconds and takes up almost no space on your device. Zero lag guaranteed.</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="bg-darker p-8 rounded-2xl border border-gray-800 hover:border-primary/50 transition-colors duration-300 group feature-card">
+                    <div class="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                        <i class="fa-solid fa-money-bill-wave text-3xl text-primary"></i>
+                    </div>
+                    <h3 class="font-heading text-2xl font-bold text-white mb-3">Instant Payouts</h3>
+                    <p class="text-gray-400">Win matches and get your rewards credited directly to your wallet instantly. No waiting periods, no hassle.</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="bg-darker p-8 rounded-2xl border border-gray-800 hover:border-primary/50 transition-colors duration-300 group feature-card">
+                    <div class="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                        <i class="fa-solid fa-bell text-3xl text-primary"></i>
+                    </div>
+                    <h3 class="font-heading text-2xl font-bold text-white mb-3">Room ID Alerts</h3>
+                    <p class="text-gray-400">Never miss a match. Get instant push notifications containing Room ID and Password directly to your phone 15 mins before start.</p>
+                </div>
+                
+                 <!-- Feature 4 -->
+                <div class="bg-darker p-8 rounded-2xl border border-gray-800 hover:border-primary/50 transition-colors duration-300 group feature-card">
+                    <div class="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                        <i class="fa-solid fa-headset text-3xl text-primary"></i>
+                    </div>
+                    <h3 class="font-heading text-2xl font-bold text-white mb-3">24/7 Support</h3>
+                    <p class="text-gray-400">Got an issue? Our dedicated admin team is available around the clock to resolve any disputes or payment queries.</p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="bg-darker p-8 rounded-2xl border border-gray-800 hover:border-primary/50 transition-colors duration-300 group feature-card">
+                    <div class="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                        <i class="fa-solid fa-chart-simple text-3xl text-primary"></i>
+                    </div>
+                    <h3 class="font-heading text-2xl font-bold text-white mb-3">Live Leaderboards</h3>
+                    <p class="text-gray-400">Track your progress, view top players of the week, and see your stats improve as you play more tournaments.</p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="bg-darker p-8 rounded-2xl border border-gray-800 hover:border-primary/50 transition-colors duration-300 group feature-card">
+                    <div class="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                        <i class="fa-solid fa-user-shield text-3xl text-primary"></i>
+                    </div>
+                    <h3 class="font-heading text-2xl font-bold text-white mb-3">Anti-Hack System</h3>
+                    <p class="text-gray-400">We maintain a clean environment. Strict verification and reporting systems ensure fair play for everyone.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How to Install Section -->
+    <section id="about" class="py-24 bg-darker">
+        <div class="container mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="order-2 lg:order-1 install-graphics relative">
+                     <!-- Circular decorative background -->
+                    <div class="w-64 h-64 md:w-96 md:h-96 rounded-full border-2 border-dashed border-gray-700 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-[spin_20s_linear_infinite]"></div>
+                    <div class="w-48 h-48 md:w-80 md:h-80 rounded-full border border-primary/30 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+                    
+                    <div class="relative z-10 flex flex-col gap-6 max-w-sm mx-auto">
+                        <div class="bg-secondary p-6 rounded-2xl border border-gray-800 shadow-xl flex gap-4 items-center transform -translate-x-4">
+                            <div class="w-12 h-12 rounded-full bg-blue-500/20 text-blue-500 flex items-center justify-center font-bold text-xl flex-shrink-0">1</div>
+                            <p class="text-gray-300 font-semibold">Download the 2.1MB APK file</p>
+                        </div>
+                        <div class="bg-secondary p-6 rounded-2xl border border-gray-800 shadow-xl flex gap-4 items-center transform translate-x-4">
+                            <div class="w-12 h-12 rounded-full bg-yellow-500/20 text-yellow-500 flex items-center justify-center font-bold text-xl flex-shrink-0">2</div>
+                            <p class="text-gray-300 font-semibold">Enable "Install from Unknown Sources"</p>
+                        </div>
+                        <div class="bg-secondary p-6 rounded-2xl border border-gray-800 shadow-xl flex gap-4 items-center transform -translate-x-2">
+                            <div class="w-12 h-12 rounded-full bg-green-500/20 text-green-500 flex items-center justify-center font-bold text-xl flex-shrink-0">3</div>
+                            <p class="text-gray-300 font-semibold">Install, Register & Start Playing!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="order-1 lg:order-2 install-text">
+                    <h2 class="font-heading text-4xl md:text-5xl font-bold uppercase text-white mb-6">Easy <span class="text-primary">Setup</span></h2>
+                    <p class="text-gray-400 text-lg mb-8">Because our app is not on the Play Store to avoid high commission fees (meaning more prize money for you!), installation requires one simple extra step.</p>
+                    
+                    <div class="bg-yellow-500/10 border-l-4 border-yellow-500 p-4 rounded mb-8">
+                        <div class="flex gap-3">
+                            <i class="fa-solid fa-triangle-exclamation text-yellow-500 text-xl mt-1"></i>
+                            <div>
+                                <h4 class="text-yellow-500 font-bold mb-1">Safe to Install</h4>
+                                <p class="text-sm text-gray-300">Your browser might show a standard warning because it's an APK file. We guarantee our app is 100% virus-free and safe for your device.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="#home" class="inline-flex text-primary font-bold hover:text-white transition-colors items-center gap-2 uppercase tracking-wide">
+                        Scroll up to download <i class="fa-solid fa-arrow-up"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black py-12 border-t border-gray-800">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-gamepad text-primary text-2xl"></i>
+                    <span class="font-heading text-xl font-bold uppercase tracking-wider text-white">NXT <span class="text-primary">Arena</span></span>
+                </div>
+                
+                <div class="flex gap-6">
+                <div class="flex gap-6">
+                    <a href="#" class="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center text-gray-400 hover:bg-primary hover:text-white transition-all"><i class="fa-brands fa-discord"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center text-gray-400 hover:bg-primary hover:text-white transition-all"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center text-gray-400 hover:bg-primary hover:text-white transition-all"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center text-gray-400 hover:bg-primary hover:text-white transition-all"><i class="fa-brands fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <div class="w-full h-px bg-gray-800 my-8"></div>
+            <div class="text-center text-gray-600 text-sm flex flex-col md:flex-row justify-between items-center gap-4">
+                <p>&copy; 2026 NXT Arena. All rights reserved.</p>
+                <p>Not affiliated with Garena Free Fire.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Download Button -->
+    <button id="floating-download-btn" class="fixed bottom-8 right-8 z-40 bg-primary hover:bg-red-600 text-white rounded-full p-4 md:px-6 shadow-[0_0_20px_rgba(255,70,85,0.5)] flex items-center justify-center gap-3 transform transition-transform hover:scale-105 group hidden">
+        <i class="fa-solid fa-download text-xl group-hover:-translate-y-1 transition-transform"></i>
+        <span class="font-bold hidden md:block uppercase tracking-wider">Download APK</span>
+    </button>
+
+    <!-- Download Modal Popup -->
+    <div id="download-modal" class="fixed inset-0 z-[100] flex items-center justify-center hidden">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0" id="modal-backdrop"></div>
+        
+        <!-- Modal Content -->
+        <div class="bg-secondary border border-gray-700 rounded-2xl p-6 md:p-8 max-w-sm w-[90%] relative z-10 shadow-2xl transform opacity-0" id="modal-content">
+            <button id="close-modal" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-gray-800 rounded-full text-gray-400 hover:text-white hover:bg-gray-700 transition-colors">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            
+            <div class="text-center mb-6 mt-2">
+                <div class="w-20 h-20 bg-primary/20 text-primary rounded-full flex items-center justify-center mx-auto mb-4 text-4xl shadow-[0_0_15px_rgba(255,70,85,0.3)]">
+                    <i class="fa-brands fa-android"></i>
+                </div>
+                <h3 class="font-heading text-2xl font-bold text-white mb-1 uppercase tracking-wide">NXT Arena</h3>
+                <p class="text-sm text-gray-400">Version 1.0.0 &bull; 2.1 MB</p>
+            </div>
+
+            <div class="bg-yellow-500/10 border-l-4 border-yellow-500 p-3 rounded mb-6 text-left">
+                <p class="text-xs text-yellow-500 font-semibold mb-1"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Quick Installation Tip</p>
+                <p class="text-xs text-gray-300 leading-relaxed">If prompted, please enable <b>"Install from Unknown Sources"</b> in your device settings to successfully install the app.</p>
+            </div>
+
+            <!-- Actual Download Link inside Modal -->
+            <a href="./NXT-Arena.apk" download="NXT-Arena.apk" id="actual-download-link" class="block w-full text-center bg-primary hover:bg-red-600 text-white font-bold py-4 px-6 rounded-lg text-lg uppercase tracking-wider glow-effect transition-all transform hover:-translate-y-1">
+                <i class="fa-solid fa-download mr-2"></i> Download Now
+            </a>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Remove Preloader
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            
+            gsap.to(loader, {
+                opacity: 0,
+                duration: 0.5,
+                onComplete: () => {
+                    loader.style.display = 'none';
+                    initAnimations();
+                }
+            });
+        });
+
+        // Mobile Menu Toggle
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            mobileMenu.classList.toggle('flex');
+        });
+
+        // Close mobile menu on link click
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                mobileMenu.classList.remove('flex');
+            });
+        });
+
+        // Navbar blur effect on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('shadow-lg', 'bg-secondary/95');
+                nav.classList.remove('bg-secondary/80');
+            } else {
+                nav.classList.remove('shadow-lg', 'bg-secondary/95');
+                nav.classList.add('bg-secondary/80');
+            }
+        });
+
+        // GSAP Animations
+        function initAnimations() {
+            // Hero Section Timeline
+            const tl = gsap.timeline();
+
+            tl.from('.hero-badge', { y: 20, opacity: 0, duration: 0.5, ease: 'power3.out' })
+              .from('.hero-title', { y: 30, opacity: 0, duration: 0.8, ease: 'power3.out' }, '-=0.3')
+              .from('.hero-desc', { y: 20, opacity: 0, duration: 0.6, ease: 'power3.out' }, '-=0.4')
+              .from('.hero-buttons a', { y: 20, opacity: 0, duration: 0.6, stagger: 0.2, ease: 'back.out(1.7)' }, '-=0.2')
+              .from('.hero-stats', { opacity: 0, duration: 0.5 }, '-=0.2')
+              .from('.hero-image', { x: 100, opacity: 0, duration: 1, ease: 'power3.out' }, '-=1.5')
+              .from('.floating-el-1', { y: -20, opacity: 0, duration: 0.6, ease: 'back.out(1.5)' }, '-=0.5')
+              .from('.floating-el-2', { y: 20, opacity: 0, duration: 0.6, ease: 'back.out(1.5)' }, '-=0.4');
+
+            // Floating animation loop for the phone elements
+            gsap.to('.floating-el-1', { y: 15, duration: 2, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+            gsap.to('.floating-el-2', { y: -15, duration: 2.5, yoyo: true, repeat: -1, ease: 'sine.inOut', delay: 0.5 });
+            gsap.to('.hero-image > div:nth-child(2)', { y: -10, duration: 3, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+
+            // ScrollTrigger for Features Section
+            gsap.registerPlugin(ScrollTrigger);
+
+            gsap.from('.feature-header', {
+                scrollTrigger: {
+                    trigger: '#features',
+                    start: 'top 80%',
+                },
+                y: 30,
+                opacity: 0,
+                duration: 0.8
+            });
+
+            gsap.from('.feature-card', {
+                scrollTrigger: {
+                    trigger: '.feature-card',
+                    start: 'top 85%',
+                },
+                y: 50,
+                opacity: 0,
+                duration: 0.6,
+                stagger: 0.15,
+                ease: 'back.out(1.2)'
+            });
+
+            // ScrollTrigger for Install Section
+            gsap.from('.install-graphics > div > div', {
+                scrollTrigger: {
+                    trigger: '#about',
+                    start: 'top 70%',
+                },
+                x: (index) => index === 1 ? 50 : -50, // Alternate slide in
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.2,
+                ease: 'power3.out'
+            });
+
+            gsap.from('.install-text > *', {
+                scrollTrigger: {
+                    trigger: '.install-text',
+                    start: 'top 75%',
+                },
+                y: 30,
+                opacity: 0,
+                duration: 0.6,
+                stagger: 0.15
+            });
+
+            // Floating Button Scroll Visibility
+            const floatingBtn = document.getElementById('floating-download-btn');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 500) {
+                    if (floatingBtn.classList.contains('hidden')) {
+                        floatingBtn.classList.remove('hidden');
+                        gsap.fromTo(floatingBtn, 
+                            { scale: 0, opacity: 0, rotation: -45 }, 
+                            { scale: 1, opacity: 1, rotation: 0, duration: 0.5, ease: "back.out(1.5)" }
+                        );
+                    }
+                } else {
+                    if (!floatingBtn.classList.contains('hidden')) {
+                        gsap.to(floatingBtn, { 
+                            scale: 0, opacity: 0, rotation: 45, duration: 0.3, 
+                            onComplete: () => floatingBtn.classList.add('hidden') 
+                        });
+                    }
+                }
+            });
+
+            // Modal Logic
+            const modal = document.getElementById('download-modal');
+            const backdrop = document.getElementById('modal-backdrop');
+            const content = document.getElementById('modal-content');
+            
+            function openModal() {
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+                
+                const tl = gsap.timeline();
+                tl.to(backdrop, { opacity: 1, duration: 0.3 })
+                  .fromTo(content, 
+                    { scale: 0.8, opacity: 0, y: 30 }, 
+                    { scale: 1, opacity: 1, y: 0, duration: 0.4, ease: "back.out(1.2)" },
+                    "-=0.1"
+                  );
+            }
+
+            function closeModal() {
+                document.body.style.overflow = 'auto'; // Restore scrolling
+                
+                const tl = gsap.timeline({
+                    onComplete: () => modal.classList.add('hidden')
+                });
+                
+                tl.to(content, { scale: 0.8, opacity: 0, y: 20, duration: 0.3, ease: "power2.in" })
+                  .to(backdrop, { opacity: 0, duration: 0.3 }, "-=0.2");
+            }
+
+            // Event Listeners for Modal
+            document.getElementById('hero-download-btn').addEventListener('click', openModal);
+            document.getElementById('floating-download-btn').addEventListener('click', openModal);
+            document.getElementById('close-modal').addEventListener('click', closeModal);
+            backdrop.addEventListener('click', closeModal);
+
+            // Close modal slightly after download begins
+            document.getElementById('actual-download-link').addEventListener('click', () => {
+                setTimeout(closeModal, 800);
+            });
+        }
+    </script>
+</body>
+</html>
